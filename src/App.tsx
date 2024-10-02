@@ -6,9 +6,11 @@ import { IoSettingsOutline } from "react-icons/io5";
 
 import { useEffect, useState } from "react";
 import { PiRanking } from "react-icons/pi";
+import { Settings } from "./components/settings";
 
 function App() {
   const [stepPage, setStepPage] = useState(1);
+  const [modalInfo, setModalInfo] = useState(false);
 
   useEffect(() => {
     const text = document.querySelector(".typing-text");
@@ -30,6 +32,10 @@ function App() {
 
   const handleStep = () => {
     setStepPage(stepPage + 1);
+  };
+
+  const handleModalInfo = () => {
+    setModalInfo(true);
   };
 
   return (
@@ -57,7 +63,10 @@ function App() {
               <PiRanking size={30} />
               <div>Rank</div>
             </div>
-            <div className="flex flex-col justify-center items-center gap-1 cursor-pointer">
+            <div
+              className="flex flex-col justify-center items-center gap-1 cursor-pointer"
+              onClick={handleModalInfo}
+            >
               <IoSettingsOutline size={30} />
               <div>Settings</div>
             </div>
@@ -72,6 +81,8 @@ function App() {
           </div>
         </>
       )}
+
+      <Settings modalInfo={modalInfo} setModalInfo={setModalInfo} />
     </div>
   );
 }
