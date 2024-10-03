@@ -1,6 +1,7 @@
 import Lottie from "lottie-react";
 import lottieOpen from "../assets/lotties/triviaopening.json";
 import lottieGo from "../assets/lotties/triviaGO.json";
+import lottieGoing from "../assets/lotties/triviagoing.json";
 import lottieThinking from "../assets/lotties/triviathink.json";
 import { IoSettingsOutline } from "react-icons/io5";
 
@@ -8,11 +9,14 @@ import { useEffect, useState } from "react";
 import { PiRanking } from "react-icons/pi";
 import { Settings } from "../components/settings";
 import { useNavigate } from "react-router-dom";
+import { Rank } from "../components/rank";
 
 export const HomePage = () => {
   const [stepPage, setStepPage] = useState(1);
   const [modalInfo, setModalInfo] = useState(false);
+  const [rankModalInfo, setRankModalInfo] = useState(false);
   const navigate = useNavigate();
+  const [firstAnimation, setFirstAnimation] = useState(1);
 
   const [category, setCategory] = useState(0);
   const [numberOfQuestions, setNumberOfQuestions] = useState(5);
@@ -45,7 +49,12 @@ export const HomePage = () => {
     setModalInfo(true);
   };
 
+  const handleRankModal = () => {
+    setRankModalInfo(true);
+  };
+
   const handleStartGame = async () => {
+    setFirstAnimation(2);
     const params = new URLSearchParams();
     params.append("amount", numberOfQuestions.toString());
 
@@ -100,7 +109,10 @@ export const HomePage = () => {
       {stepPage === 2 && (
         <>
           <div className="absolute w-full top-4 flex flex-row items-center justify-between px-6 text-white">
-            <div className="flex flex-col justify-center items-center gap-1 cursor-pointer">
+            <div
+              className="flex flex-col justify-center items-center gap-1 cursor-pointer"
+              onClick={handleRankModal}
+            >
               <PiRanking size={30} />
               <div>Rank</div>
             </div>
@@ -113,11 +125,19 @@ export const HomePage = () => {
             </div>
           </div>
           <div className="cursor-pointer" onClick={handleStartGame}>
-            <Lottie
-              animationData={lottieThinking}
-              loop={true}
-              className="w-96"
-            />
+            {firstAnimation === 1 ? (
+              <Lottie
+                animationData={lottieThinking}
+                loop={true}
+                className="w-96"
+              />
+            ) : (
+              <Lottie
+                animationData={lottieGoing}
+                loop={true}
+                className="w-96"
+              />
+            )}
             <div className="text-3xl font-bold text-white">Click to Start</div>
           </div>
         </>
@@ -135,6 +155,8 @@ export const HomePage = () => {
         setType={setType}
         type={type}
       />
+
+      <Rank modalInfo={rankModalInfo} setModalInfo={setRankModalInfo} />
     </div>
   );
 };
